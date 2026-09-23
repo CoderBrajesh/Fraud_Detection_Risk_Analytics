@@ -1,4 +1,4 @@
-# 🔐 Fraud Detection & Risk Analytics System
+#  Fraud Detection & Risk Analytics System
 
 A machine learning-based web application that detects potentially fraudulent financial transactions and provides real-time risk analysis.
 
@@ -6,7 +6,7 @@ The system uses a Random Forest machine learning model to classify transactions 
 
 ---
 
-## 🚀 Project Overview
+##  Project Overview
 
 Fraud Detection & Risk Analytics is a Flask-based machine learning web application designed to analyze financial transactions and identify suspicious activity.
 
@@ -26,7 +26,7 @@ The application allows users to:
 
 ---
 
-## 🧠 Machine Learning Model
+##  Machine Learning Model
 
 The project uses a **Random Forest Classifier** for fraud detection.
 
