@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Fraud Analysis Result</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🛡️
+            </div>
+
+            <div>
+                <h2>FraudGuard</h2>
+                <span>Risk Analytics</span>
+            </div>
+
+        </div>
+
+
+        <nav>
+
+            <a href="/" class="nav-item">
+                <span>📊</span>
+                Dashboard
+            </a>
+
+            <a href="/" class="nav-item active">
+                <span>🔍</span>
+                Analyze
+            </a>
+
+            <a href="/" class="nav-item">
+                <span>💳</span>
+                Transactions
+            </a>
+
+            <a href="/" class="nav-item">
+                <span>📈</span>
+                Reports
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <main class="main">
+
+
+        <header class="topbar">
+
+            <div>
+
+                <p class="eyebrow">
+                    ANALYSIS COMPLETE
+                </p>
+
+                <h1>
+                    Transaction Risk Result
+                </h1>
+
+            </div>
+
+            <div class="status">
+
+                <span class="status-dot"></span>
+
+                AI Engine Active
+
+            </div>
+
+        </header>
+
+
+        <section class="content-grid">
+
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            PREDICTION
+                        </p>
+
+                        <h2>
+                            Transaction Result
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                {% if result == "FRAUD" %}
+
+                    <div class="model-visual">
+
+                        <div class="shield">
+                            ⚠️
+                        </div>
+
+                        <h3 style="color:#dc2626;">
+                            Potential Fraud Detected
+                        </h3>
+
+                        <p>
+                            The machine learning model has identified
+                            this transaction as potentially fraudulent.
+                        </p>
+
+                    </div>
+
+                {% else %}
+
+                    <div class="model-visual">
+
+                        <div class="shield">
+                            ✓
+                        </div>
+
+                        <h3 style="color:#16a34a;">
+                            Transaction Appears Genuine
+                        </h3>
+
+                        <p>
+                            The machine learning model did not detect
+                            a significant fraud pattern.
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+
+                <div class="model-metrics">
+
+                    <div>
+
+                        <span>Result</span>
+
+                        <strong>
+                            {{ result }}
+                        </strong>
+
+                    </div>
+
+                    <div>
+
+                        <span>Risk Score</span>
+
+                        <strong>
+                            {{ risk_score }}%
+                        </strong>
+
+                    </div>
+
+                    <div>
+
+                        <span>Risk Level</span>
+
+                        <strong>
+                            {{ risk_level }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <a
+                    href="/"
+                    class="analyze-btn"
+                    style="margin-top:25px; display:flex;"
+                >
+                    ← Analyze Another Transaction
+                </a>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            TRANSACTION
+                        </p>
+
+                        <h2>
+                            Transaction Details
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="security-message">
+
+                    <strong>
+                        Transaction Amount
+                    </strong>
+
+                    <br><br>
+
+                    ₹{{ transaction_amount }}
+
+                </div>
+
+
+                <div class="security-message">
+
+                    <strong>
+                        Risk Assessment
+                    </strong>
+
+                    <br><br>
+
+                    {{ risk_level }} RISK
+
+                    <br>
+
+                    Model confidence:
+                    {{ risk_score }}%
+
+                </div>
+
+
+                <div class="security-message">
+
+                    🔒 This analysis was generated by the
+                    Random Forest fraud detection model.
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+        <footer>
+
+            <span>
+                FraudGuard Risk Analytics
+            </span>
+
+            <span>
+                Python • Flask • Scikit-learn
+            </span>
+
+        </footer>
+
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

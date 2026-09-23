@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Bulk Fraud Analysis</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🛡️
+            </div>
+
+            <div>
+
+                <h2>FraudGuard</h2>
+
+                <span>Risk Analytics</span>
+
+            </div>
+
+        </div>
+
+
+        <nav>
+
+            <a href="/" class="nav-item">
+
+                <span>📊</span>
+
+                Dashboard
+
+            </a>
+
+
+            <a
+                href="/#analyze"
+                class="nav-item"
+            >
+
+                <span>🔍</span>
+
+                Analyze
+
+            </a>
+
+
+            <a
+                href="/bulk-analysis"
+                class="nav-item active"
+            >
+
+                <span>📁</span>
+
+                Bulk Analysis
+
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+
+        <header class="topbar">
+
+            <div>
+
+                <p class="eyebrow">
+                    MACHINE LEARNING
+                </p>
+
+                <h1>
+                    Bulk Fraud Analysis
+                </h1>
+
+            </div>
+
+
+            <div class="status">
+
+                <span class="status-dot"></span>
+
+                Model Active
+
+            </div>
+
+        </header>
+
+
+        <!-- UPLOAD -->
+
+        <section class="panel upload-panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <p class="eyebrow">
+                        CSV ANALYSIS
+                    </p>
+
+                    <h2>
+                        Upload Transaction Dataset
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="upload-info">
+
+                <div class="upload-icon">
+                    📁
+                </div>
+
+                <h3>
+                    Analyze thousands of transactions
+                </h3>
+
+                <p>
+                    Upload a CSV file containing transaction
+                    data. The Random Forest model will
+                    automatically classify each transaction.
+                </p>
+
+            </div>
+
+
+            {% if error %}
+
+            <div class="error-message">
+
+                ⚠️ {{ error }}
+
+            </div>
+
+            {% endif %}
+
+
+            <form
+                action="/bulk-analysis"
+                method="POST"
+                enctype="multipart/form-data"
+                class="upload-form"
+            >
+
+                <label
+                    for="file"
+                    class="file-label"
+                >
+
+                    Choose CSV File
+
+                </label>
+
+
+                <input
+                    type="file"
+                    id="file"
+                    name="file"
+                    accept=".csv"
+                    required
+                >
+
+
+                <button
+                    type="submit"
+                    class="analyze-btn"
+                >
+
+                    🚀
+
+                    Analyze CSV
+
+                    →
+
+                </button>
+
+            </form>
+
+
+            <div class="required-columns">
+
+                <strong>
+                    Required CSV columns:
+                </strong>
+
+                <div>
+
+                    transaction_amount
+
+                    account_age_days
+
+                    previous_transactions
+
+                    failed_transactions
+
+                    transaction_hour
+
+                    is_international
+
+                    device_change
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        {% if analyzed %}
+
+
+        <!-- RESULTS -->
+
+        <section class="stats-grid">
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon blue">
+                    📊
+                </div>
+
+                <div>
+
+                    <p>Total Analyzed</p>
+
+                    <h2>
+                        {{ total }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon red">
+                    ⚠️
+                </div>
+
+                <div>
+
+                    <p>Fraud Detected</p>
+
+                    <h2>
+                        {{ fraud_count }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon green">
+                    ✓
+                </div>
+
+                <div>
+
+                    <p>Genuine</p>
+
+                    <h2>
+                        {{ genuine_count }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon orange">
+                    📈
+                </div>
+
+                <div>
+
+                    <p>Fraud Rate</p>
+
+                    <h2>
+                        {{ fraud_rate }}%
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- RESULT PREVIEW -->
+
+        <section class="panel transaction-panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <p class="eyebrow">
+                        RESULTS
+                    </p>
+
+                    <h2>
+                        Prediction Preview
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Amount</th>
+
+                            <th>Account Age</th>
+
+                            <th>Previous Txns</th>
+
+                            <th>Failed Txns</th>
+
+                            <th>Prediction</th>
+
+                            <th>Risk Score</th>
+
+                            <th>Risk Level</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% for row in preview %}
+
+                        <tr>
+
+                            <td>
+                                ₹{{ row["transaction_amount"] }}
+                            </td>
+
+                            <td>
+                                {{ row["account_age_days"] }}
+                            </td>
+
+                            <td>
+                                {{ row["previous_transactions"] }}
+                            </td>
+
+                            <td>
+                                {{ row["failed_transactions"] }}
+                            </td>
+
+
+                            <td>
+
+                                {% if row["prediction"] == "FRAUD" %}
+
+                                    <span class="badge fraud">
+                                        FRAUD
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge genuine">
+                                        GENUINE
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+                                {{ row["risk_score"] }}%
+                            </td>
+
+
+                            <td>
+                                {{ row["risk_level"] }}
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- DOWNLOAD -->
+
+        <section class="panel download-panel">
+
+            <div>
+
+                <p class="eyebrow">
+                    EXPORT
+                </p>
+
+                <h2>
+                    Download Analysis Results
+                </h2>
+
+                <p>
+                    Upload the same CSV again to generate
+                    and download the complete prediction file.
+                </p>
+
+            </div>
+
+
+            <form
+                action="/download-results"
+                method="POST"
+                enctype="multipart/form-data"
+            >
+
+                <input
+                    type="file"
+                    name="file"
+                    accept=".csv"
+                    required
+                >
+
+
+                <button
+                    type="submit"
+                    class="download-btn"
+                >
+
+                    ⬇️
+
+                    Download CSV
+
+                </button>
+
+            </form>
+
+        </section>
+
+
+        {% endif %}
+
+
+        <footer>
+
+            <span>
+                FraudGuard Risk Analytics
+            </span>
+
+            <span>
+                Python • Flask • Pandas • Scikit-learn
+            </span>
+
+        </footer>
+
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

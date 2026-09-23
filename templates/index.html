@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>FraudGuard | Dashboard</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+    <!-- SIDEBAR -->
+
+<a href="/transactions" class="nav-item"></a>
+
+    <span>📁</span>
+
+    Bulk Analysis
+<a
+    href="/bulk-analysis"
+    class="nav-item"
+>
+    <span>📁</span>
+    Bulk Analysis
+</a>
+
+</a></a>
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🛡️
+            </div>
+
+            <div>
+
+                <h2>FraudGuard</h2>
+
+                <span>Risk Analytics</span>
+
+            </div>
+
+        </div>
+
+
+        <nav>
+
+            <a href="/" class="nav-item active">
+                <span>📊</span>
+                Dashboard
+            </a>
+
+            <a href="#analyze" class="nav-item">
+                <span>🔍</span>
+                Analyze
+            </a>
+
+            <a href="#transactions" class="nav-item">
+                <span>💳</span>
+                Transactions
+            </a>
+
+            <a href="#analytics" class="nav-item">
+                <span>📈</span>
+                Analytics
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <a href="/" class="nav-item">
+                <span>⚙️</span>
+                Settings
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+
+        <!-- TOPBAR -->
+
+       <div class="status">
+
+    <span class="status-dot"></span>
+
+    {{ user_name }}
+
+    <a
+        href="/logout"
+        style="margin-left:10px;color:#dc2626;"
+    >
+        Logout
+    </a>
+
+</div>
+
+        <!-- STAT CARDS -->
+
+        <section class="stats-grid">
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon blue">
+                    💳
+                </div>
+
+                <div>
+
+                    <p>Total Transactions</p>
+
+                    <h2>
+                        {{ total_transactions }}
+                    </h2>
+
+                    <small>
+                        Analyzed transactions
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon red">
+                    ⚠️
+                </div>
+
+                <div>
+
+                    <p>Fraud Detected</p>
+
+                    <h2>
+                        {{ fraud_transactions }}
+                    </h2>
+
+                    <small>
+                        Suspicious transactions
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon green">
+                    ✓
+                </div>
+
+                <div>
+
+                    <p>Genuine</p>
+
+                    <h2>
+                        {{ genuine_transactions }}
+                    </h2>
+
+                    <small>
+                        Normal transactions
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon orange">
+                    📊
+                </div>
+
+                <div>
+
+                    <p>Fraud Rate</p>
+
+                    <h2>
+                        {{ fraud_rate }}%
+                    </h2>
+
+                    <small>
+                        Current detection rate
+                    </small>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- ANALYTICS -->
+
+        <section
+            class="analytics-grid"
+            id="analytics"
+        >
+
+
+            <div class="panel chart-panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            ANALYTICS
+                        </p>
+
+                        <h2>
+                            Transaction Overview
+                        </h2>
+
+                    </div>
+
+                </div>
+
+                <div class="chart-container">
+
+                    <canvas id="transactionChart"></canvas>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel chart-panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            RISK ANALYSIS
+                        </p>
+
+                        <h2>
+                            Fraud Distribution
+                        </h2>
+
+                    </div>
+
+                </div>
+
+                <div class="chart-container">
+
+                    <canvas id="fraudChart"></canvas>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- ANALYZE -->
+
+        <section
+            class="content-grid"
+            id="analyze"
+        >
+
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            MACHINE LEARNING
+                        </p>
+
+                        <h2>
+                            Analyze Transaction
+                        </h2>
+
+                    </div>
+
+                    <span class="model-badge">
+                        Random Forest
+                    </span>
+
+                </div>
+
+
+                <form
+                    action="/predict"
+                    method="POST"
+                    class="transaction-form"
+                >
+
+
+                    <div class="form-grid">
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Transaction Amount
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <span>₹</span>
+
+                                <input
+                                    type="number"
+                                    name="transaction_amount"
+                                    placeholder="50000"
+                                    min="1"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Account Age
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <input
+                                    type="number"
+                                    name="account_age_days"
+                                    placeholder="365"
+                                    min="1"
+                                    required
+                                >
+
+                                <span>days</span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Previous Transactions
+                            </label>
+
+                            <input
+                                type="number"
+                                name="previous_transactions"
+                                placeholder="25"
+                                min="0"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Failed Transactions
+                            </label>
+
+                            <input
+                                type="number"
+                                name="failed_transactions"
+                                placeholder="2"
+                                min="0"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Transaction Hour
+                            </label>
+
+                            <input
+                                type="number"
+                                name="transaction_hour"
+                                placeholder="14"
+                                min="0"
+                                max="23"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                International Transaction
+                            </label>
+
+                            <select name="is_international">
+
+                                <option value="0">
+                                    No
+                                </option>
+
+                                <option value="1">
+                                    Yes
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group full-width">
+
+                            <label>
+                                Device Change
+                            </label>
+
+                            <select name="device_change">
+
+                                <option value="0">
+                                    No — Same Device
+                                </option>
+
+                                <option value="1">
+                                    Yes — New Device
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="analyze-btn"
+                    >
+
+                        🔍
+
+                        Analyze Transaction
+
+                        →
+
+                    </button>
+
+
+                </form>
+
+            </div>
+
+
+            <!-- MODEL -->
+
+            <div class="panel model-panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            AI MODEL
+                        </p>
+
+                        <h2>
+                            Risk Engine
+                        </h2>
+
+                    </div>
+
+                    <div class="online-badge">
+                        ● Online
+                    </div>
+
+                </div>
+
+
+                <div class="model-visual">
+
+                    <div class="shield">
+                        🛡️
+                    </div>
+
+                    <h3>
+                        Random Forest Classifier
+                    </h3>
+
+                    <p>
+                        Machine learning model evaluates
+                        transaction behavior and identifies
+                        suspicious patterns.
+                    </p>
+
+                </div>
+
+
+                <div class="model-metrics">
+
+                    <div>
+
+                        <span>Features</span>
+
+                        <strong>7</strong>
+
+                    </div>
+
+                    <div>
+
+                        <span>Algorithm</span>
+
+                        <strong>RF</strong>
+
+                    </div>
+
+                    <div>
+
+                        <span>Status</span>
+
+                        <strong>Active</strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- TRANSACTION HISTORY -->
+
+        <section
+            class="panel transaction-panel"
+            id="transactions"
+        >
+
+            <div class="panel-header">
+
+                <div>
+
+                    <p class="eyebrow">
+                        HISTORY
+                    </p>
+
+                    <h2>
+                        Recent Transactions
+                    </h2>
+
+                </div>
+
+                <span class="model-badge">
+                    Latest 10
+                </span>
+
+            </div>
+
+
+            {% if transactions %}
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Amount</th>
+
+                            <th>Result</th>
+
+                            <th>Risk Score</th>
+
+                            <th>Risk Level</th>
+
+                            <th>Date</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% for transaction in transactions %}
+
+                        <tr>
+
+                            <td>
+                                #{{ transaction["id"] }}
+                            </td>
+
+                            <td>
+                                ₹{{ transaction["transaction_amount"] }}
+                            </td>
+
+
+                            <td>
+
+                                {% if transaction["prediction"] == "FRAUD" %}
+
+                                    <span class="badge fraud">
+                                        FRAUD
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge genuine">
+                                        GENUINE
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+                                {{ transaction["risk_score"] }}%
+                            </td>
+
+
+                            <td>
+
+                                <span class="risk-text">
+
+                                    {{ transaction["risk_level"] }}
+
+                                </span>
+
+                            </td>
+
+
+                            <td>
+                                {{ transaction["created_at"] }}
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+                <div class="empty-state">
+
+                    <div>
+                        📋
+                    </div>
+
+                    <h3>
+                        No transactions yet
+                    </h3>
+
+                    <p>
+                        Analyze your first transaction
+                        to see it here.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </section>
+
+
+        <footer>
+
+            <span>
+                FraudGuard Risk Analytics
+            </span>
+
+            <span>
+                Python • Flask • SQLite • Scikit-learn
+            </span>
+
+        </footer>
+
+
+    </main>
+
+</div>
+
+
+<!-- CHARTS -->
+
+<script>
+
+const totalTransactions =
+    {{ total_transactions }};
+
+const fraudTransactions =
+    {{ fraud_transactions }};
+
+const genuineTransactions =
+    {{ genuine_transactions }};
+
+
+// Transaction Chart
+
+new Chart(
+    document.getElementById("transactionChart"),
+    {
+
+        type: "bar",
+
+        data: {
+
+            labels: [
+                "Total",
+                "Fraud",
+                "Genuine"
+            ],
+
+            datasets: [{
+
+                label: "Transactions",
+
+                data: [
+                    totalTransactions,
+                    fraudTransactions,
+                    genuineTransactions
+                ]
+
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                legend: {
+                    display: false
+                }
+
+            }
+
+        }
+
+    }
+);
+
+
+// Fraud Distribution
+
+new Chart(
+    document.getElementById("fraudChart"),
+    {
+
+        type: "doughnut",
+
+        data: {
+
+            labels: [
+                "Fraud",
+                "Genuine"
+            ],
+
+            datasets: [{
+
+                data: [
+                    fraudTransactions,
+                    genuineTransactions
+                ]
+
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                legend: {
+                    position: "bottom"
+                }
+
+            }
+
+        }
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>
